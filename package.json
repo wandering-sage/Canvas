@@ -1,0 +1,24 @@
+{
+  "name": "canvas",
+  "version": "1.0.0",
+  "description": "A web canvas to draw/paint anything.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wandering-sage/Canvas.git"
+  },
+  "keywords": [
+    "paint",
+    "draw",
+    "color"
+  ],
+  "author": "Shivam Kumar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wandering-sage/Canvas/issues"
+  },
+  "homepage": "https://github.com/wandering-sage/Canvas#readme"
+}

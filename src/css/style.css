@@ -1,0 +1,53 @@
+* {
+	-moz-box-sizing: border-box; /* Firexfox */
+	-webkit-box-sizing: border-box; /* Safari/Chrome/iOS/Android */
+	box-sizing: border-box; /* IE */
+}
+
+body {
+	background-color: #282828;
+	margin: 0;
+}
+
+.toolBar {
+	background-color: #535353;
+	margin: 10px 0 0 15px;
+	padding: 5px;
+	width: 148px;
+}
+
+.draw {
+	position: absolute;
+	left: 180px;
+	top: 15px;
+	background-color: rgb(255, 255, 255);
+	border: 2px solid rgb(180, 173, 70);
+}
+
+.toolBar > .tool {
+	height: 29px;
+	width: 38px;
+	margin-top: 4px;
+	border-radius: 10%;
+	background-color: #535353;
+}
+
+.toolBar > .tool:hover {
+	background-color: #404040;
+}
+
+.tool.active {
+	background-color: #333333 !important;
+}
+
+.toolBar > p {
+	color: #e0e0e0;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.colorChange {
+	width: 50%;
+	height: 2rem;
+	margin-left: 15%;
+}

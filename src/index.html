@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="./css/style.css" />
+		<title>Canvas</title>
+	</head>
+	<body>
+		<div class="toolBar">
+			<div class="tool" data-name="pen">pen</div>
+			<div class="tool" data-name="brush">brush</div>
+			<p>Brush Size:</p>
+			<input type="range" min="1" max="100" value="10" class="slider" />
+			<p>Brush Color:</p>
+			<input type="color" class="colorChange" />
+		</div>
+		<canvas class="draw"></canvas>
+		<script src="./js/canvas.js"></script>
+	</body>
+</html>
