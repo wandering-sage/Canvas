@@ -3,8 +3,8 @@ var c = canvas.getContext("2d");
 var size = document.querySelector(".slider");
 var color = document.querySelector(".colorChange");
 var isDrawing = false;
-var lwidth = 10;
-var bColor = "#000";
+var lwidth = 10; // for current lineWidth
+var bColor = "#000"; // for StrokeColor
 
 canvas.width = window.innerWidth - 195;
 canvas.height = window.innerHeight - 30;
