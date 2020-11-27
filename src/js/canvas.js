@@ -26,7 +26,7 @@ canvas.height = window.innerHeight - 30;
 c.fillStyle = "white";
 c.fillRect(0, 0, canvas.width, canvas.height);
 
-// on color/brushsize change
+// on color/brush-size change
 size.oninput = () => (lwidth = size.value);
 color.oninput = () => (userColor = color.value);
 
@@ -38,20 +38,6 @@ canvas.addEventListener("mousemove", brushDraw);
 
 // ********************Functions*************************
 // ******************************************************
-
-function brushDraw(e) {
-	if (!isDrawing) return;
-	c.lineJoin = "round";
-	c.lineCap = "round";
-	c.strokeStyle = userColor;
-	c.lineWidth = lwidth;
-	c.beginPath();
-	c.moveTo(lastX, lastY);
-	c.lineTo(e.offsetX, e.offsetY);
-	c.stroke();
-	lastX = e.offsetX;
-	lastY = e.offsetY;
-}
 
 function mouseDown(e) {
 	if (e.button == 0) {
@@ -70,23 +56,42 @@ function mouseUp() {
 	c.lineWidth = lwidth / 4;
 }
 
+function brushDraw(e) {
+	if (!isDrawing) return;
+	c.lineJoin = "round";
+	c.lineCap = "round";
+	c.strokeStyle = userColor;
+	c.lineWidth = lwidth;
+	c.beginPath();
+	c.moveTo(lastX, lastY);
+	c.lineTo(e.offsetX, e.offsetY);
+	c.stroke();
+	lastX = e.offsetX;
+	lastY = e.offsetY;
+}
+
 function bucketTool(e) {
 	var pixelData = c.getImageData(0, 0, canvas.width, canvas.height);
 	let x = e.offsetX;
 	let y = e.offsetY;
 	const pos = (y * pixelData.width + x) * 4;
-	// from #ffd700 to (255,215,0)
+
+	// converting hex to rgb i.e. from #ffd700 to (255,215,0)
 	let r = "0x" + userColor[1] + userColor[2];
 	let g = "0x" + userColor[3] + userColor[4];
 	let b = "0x" + userColor[5] + userColor[6];
+
 	let replacementColor = [r, g, b, 255];
+
 	let clickedPixelColor = [
 		pixelData.data[pos],
 		pixelData.data[pos + 1],
 		pixelData.data[pos + 2],
 		pixelData.data[pos + 3],
 	];
+
 	floodFill(pos);
+
 	c.putImageData(pixelData, 0, 0);
 
 	// **************Functions*************************
@@ -94,14 +99,18 @@ function bucketTool(e) {
 	function floodFill(i) {
 		if (checkSameColor(clickedPixelColor, replacementColor)) return;
 		setPixelColor(i, replacementColor);
+
 		var q = new Queue();
 		q.enqueue(i);
+
 		while (!q.isEmpty()) {
 			let currentPixel = q.dequeue();
+
 			let up = pixelUp(currentPixel);
 			let down = pixelDown(currentPixel);
 			let left = pixelLeft(currentPixel);
 			let right = pixelRight(currentPixel);
+
 			if (checkPixelColor(up)) {
 				setPixelColor(up, replacementColor);
 				q.enqueue(up);
@@ -132,11 +141,13 @@ function bucketTool(e) {
 		function checkSameColor(a, b) {
 			return a.reduce((acc, crr, i) => acc && crr == b[i], true);
 		}
+
 		function setPixelColor(pixel, color) {
 			for (let i = 0; i < 4; i++) {
 				pixelData.data[pixel + i] = color[i];
 			}
 		}
+
 		function pixelDown(p) {
 			return p + pixelData.width * 4;
 		}
@@ -149,6 +160,7 @@ function bucketTool(e) {
 		function pixelRight(p) {
 			return p + 4;
 		}
+
 		function checkPixelColor(a) {
 			if (
 				pixelData.data[a] < clickedPixelColor[0] + 4 &&
