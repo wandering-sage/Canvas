@@ -12,8 +12,8 @@ var server = http.createServer((req, res) => {
 		sendAptFile(req, res, "text/css", "utf8");
 	} else if (req.url.match(".js$")) {
 		sendAptFile(req, res, "text/javascript", "utf8");
-	} else if (req.url.match(".png$")) {
-		sendAptFile(req, res, "image/png");
+	} else if (req.url.match(".ico$")) {
+		sendAptFile(req, res, "image/ico");
 	}
 });
 
