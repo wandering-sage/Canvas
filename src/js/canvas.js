@@ -1,3 +1,4 @@
+// to implement queue in flood fill algo
 class Queue {
 	constructor() {
 		this.items = [];
@@ -12,13 +13,17 @@ class Queue {
 		return this.items.length == 0;
 	}
 }
-var canvas = document.querySelector(".draw");
+var canvas = document.querySelector(".draw"); //selects canvas element
 var c = canvas.getContext("2d");
-var size = document.querySelector(".slider");
-var color = document.querySelector(".colorChange");
+var tools = document.querySelectorAll(".tool"); //contains array of tools
+var userCursor = document.querySelector(".userCursor"); //selects the cursor div
+var size = document.querySelector(".slider"); //selects slider input element
+var color = document.querySelector(".colorChange"); //selects color input element
 var isDrawing = false;
+var currentTool = document.querySelector(".active"); //selects curently active tool element
+var loader = document.querySelector(".loader");
 var lwidth = 10; // for current lineWidth
-var userColor = "#00000ff"; // for StrokeColor
+var userColor = color.value; // for StrokeColor
 
 // initlizing a white Canvas
 canvas.width = window.innerWidth - 195;
@@ -26,42 +31,137 @@ canvas.height = window.innerHeight - 30;
 c.fillStyle = "white";
 c.fillRect(0, 0, canvas.width, canvas.height);
 
-// on color/brush-size change
-size.oninput = () => (lwidth = size.value);
-color.oninput = () => (userColor = color.value);
+// on brush-size change
+size.oninput = () => {
+	lwidth = size.value;
+
+	// to update cursor size on user input (size is one more than the stroke size)
+	let bsize = +size.value + 1;
+	userCursor.style.width = bsize + "px";
+	userCursor.style.height = bsize + "px";
+};
+// on brush color change
+color.oninput = () => {
+	userColor = color.value;
+	// to change cursor color
+	userCursor.style.borderColor = userColor;
+};
+
+//click event listener on tools array
+tools.forEach((e) => e.addEventListener("click", toolClicked));
 
 canvas.addEventListener("mousedown", mouseDown);
 canvas.addEventListener("mouseup", mouseUp);
-canvas.addEventListener("mouseout", mouseUp);
+canvas.addEventListener("mouseout", hideCursorAndStopDrawing);
+canvas.addEventListener("mouseenter", showCursor);
 
-canvas.addEventListener("mousemove", brushDraw);
+canvas.addEventListener("mousemove", trackCursorAndDraw);
 
 // ********************Functions*************************
 // ******************************************************
 
-function mouseDown(e) {
-	if (e.button == 0) {
-		if (!e.shiftKey) {
-			isDrawing = true;
-			lastX = e.offsetX;
-			lastY = e.offsetY;
-			return;
+function toolClicked(e) {
+	let tool = e.target;
+	let name = tool.getAttribute("data-name");
+	switch (name) {
+		case "save":
+			saveCanvas();
+			break;
+		case "reset":
+			resetCanvas();
+			break;
+		case "brush":
+		case "bucket":
+		case "eraser":
+			switchTool();
+			break;
+	}
+
+	// **************************Functions*********************
+
+	function saveCanvas() {
+		if (confirm("Do you want to save this Canvas as png?")) {
+			if (window.navigator.msSaveBlob) {
+				// IE/Edge support
+				window.navigator.msSaveBlob(
+					canvas.msToBlob(),
+					"canvas-image.png"
+				);
+			} else {
+				const a = document.createElement("a");
+
+				document.body.appendChild(a);
+				a.href = canvas.toDataURL();
+				a.download = "canvas-image.png";
+				a.click();
+				document.removeChild(a);
+			}
 		}
+	}
+
+	function resetCanvas() {
+		if (confirm("Are you sure you want to reset this Canvas?")) {
+			c.fillStyle = "white";
+			c.fillRect(0, 0, canvas.width, canvas.height);
+		}
+	}
+
+	function switchTool() {
+		currentTool.classList.remove("active");
+		userCursor.classList.remove(
+			`${currentTool.getAttribute("data-name")}Cursor`
+		);
+		userCursor.classList.add(`${name}Cursor`);
+		tool.classList.add("active");
+		userCursor.style.borderColor = userColor;
+		currentTool = tool;
+	}
+}
+
+function mouseDown(e) {
+	if (currentTool.getAttribute("data-name") == "bucket") {
 		bucketTool(e);
+	} else {
+		isDrawing = true;
+		// to move the start of line to current mouse position
+		lastX = e.offsetX;
+		lastY = e.offsetY;
 	}
 }
 
 function mouseUp() {
 	isDrawing = false;
-	c.lineWidth = lwidth / 4;
 }
 
-function brushDraw(e) {
+function hideCursorAndStopDrawing() {
+	isDrawing = false;
+	userCursor.classList.toggle("hidden");
+}
+
+function showCursor() {
+	userCursor.classList.toggle("hidden");
+}
+
+function trackCursorAndDraw(e) {
+	// to change cursor position with mouse-move and only starts drawing when mouse clicked
+	userCursor.style.left = e.pageX + "px";
+	userCursor.style.top = e.pageY + "px";
+
 	if (!isDrawing) return;
+
+	// Only executes if mouse is pressed while moving the mouse
 	c.lineJoin = "round";
 	c.lineCap = "round";
-	c.strokeStyle = userColor;
+
+	// use white color to paint if eraser is selected
+	let strokeColor = userColor;
+	if (currentTool.getAttribute("data-name") == "eraser")
+		strokeColor = "white";
+
+	c.strokeStyle = strokeColor;
 	c.lineWidth = lwidth;
+
+	//start drawing line
 	c.beginPath();
 	c.moveTo(lastX, lastY);
 	c.lineTo(e.offsetX, e.offsetY);
@@ -72,6 +172,8 @@ function brushDraw(e) {
 
 function bucketTool(e) {
 	var pixelData = c.getImageData(0, 0, canvas.width, canvas.height);
+
+	// to get currrent pixel's position
 	let x = e.offsetX;
 	let y = e.offsetY;
 	const pos = (y * pixelData.width + x) * 4;
@@ -81,23 +183,39 @@ function bucketTool(e) {
 	let g = "0x" + userColor[3] + userColor[4];
 	let b = "0x" + userColor[5] + userColor[6];
 
-	let replacementColor = [r, g, b, 255];
+	let replacementColor = [r, g, b];
 
 	let clickedPixelColor = [
 		pixelData.data[pos],
 		pixelData.data[pos + 1],
 		pixelData.data[pos + 2],
-		pixelData.data[pos + 3],
 	];
 
-	floodFill(pos);
+	// to set loading gif's location at current mous position
+	loader.style.top = e.pageY + "px";
+	loader.style.left = e.pageX + "px";
 
-	c.putImageData(pixelData, 0, 0);
+	// to start loading Gif
+	toggleLoading();
+
+	// to make the loading Gif Work
+	setTimeout(fillColor, 1);
 
 	// **************Functions*************************
 
+	function fillColor() {
+		c.putImageData(floodFill(pos), 0, 0);
+		// to end loading Gif
+		toggleLoading();
+	}
+	function toggleLoading() {
+		loader.classList.toggle("hidden");
+	}
+
 	function floodFill(i) {
-		if (checkSameColor(clickedPixelColor, replacementColor)) return;
+		if (checkSameColor(clickedPixelColor, replacementColor))
+			return pixelData;
+
 		setPixelColor(i, replacementColor);
 
 		var q = new Queue();
@@ -135,6 +253,7 @@ function bucketTool(e) {
 					q.enqueue(right);
 			}
 		}
+		return pixelData;
 
 		// **************Functions*************************
 
@@ -143,7 +262,7 @@ function bucketTool(e) {
 		}
 
 		function setPixelColor(pixel, color) {
-			for (let i = 0; i < 4; i++) {
+			for (let i = 0; i < 3; i++) {
 				pixelData.data[pixel + i] = color[i];
 			}
 		}
@@ -162,6 +281,7 @@ function bucketTool(e) {
 		}
 
 		function checkPixelColor(a) {
+			// allows a variation of +- 4 in colors
 			if (
 				pixelData.data[a] < clickedPixelColor[0] + 4 &&
 				pixelData.data[a] > clickedPixelColor[0] - 4 &&

@@ -9,14 +9,22 @@
 	</head>
 	<body>
 		<div class="toolBar">
-			<div class="tool" data-name="pen">line</div>
-			<div class="tool" data-name="brush">brush</div>
+			<h2>TOOLS</h2>
+			<div class="tool" data-name="save">Save</div>
+			<div class="tool" data-name="reset">Reset</div>
+			<div class="tool active" data-name="brush">Brush</div>
+			<div class="tool" data-name="bucket">Bucket</div>
+			<div class="tool" data-name="eraser">Eraser</div>
 			<p>Brush Size:</p>
 			<input type="range" min="1" max="100" value="10" class="slider" />
-			<p>Brush Color:</p>
+			<p>Current Color:</p>
 			<input type="color" class="colorChange" />
 		</div>
 		<canvas class="draw"></canvas>
+		<div class="userCursor hidden brushCursor"></div>
+		<div class="loader hidden">
+			<img src="./images/loading.gif" alt="loading" />
+		</div>
 		<script src="./js/canvas.js"></script>
 	</body>
 </html>

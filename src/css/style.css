@@ -7,13 +7,21 @@
 body {
 	background-color: #282828;
 	margin: 0;
+	-webkit-user-select: none;
+	-moz-user-select: -moz-none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 .toolBar {
 	background-color: #535353;
 	margin: 10px 0 0 15px;
 	padding: 5px;
+	padding-bottom: 25px;
+	border-radius: 5%;
 	width: 148px;
+	text-align: center;
+	color: rgb(207, 207, 207);
 }
 
 .draw {
@@ -22,14 +30,24 @@ body {
 	top: 15px;
 	background-color: rgb(255, 255, 255);
 	border: 2px solid rgb(180, 173, 70);
+	cursor: none;
 }
 
 .toolBar > .tool {
 	height: 29px;
-	width: 38px;
+	width: 55px;
 	margin-top: 4px;
-	border-radius: 10%;
-	background-color: #535353;
+	margin-left: 30%;
+	border: 2px solid #282828;
+	border-radius: 15%;
+	background-color: #474747;
+	text-align: center;
+	color: rgb(201, 201, 201);
+	cursor: pointer;
+}
+
+.toolBar > input {
+	cursor: pointer;
 }
 
 .toolBar > .tool:hover {
@@ -42,12 +60,56 @@ body {
 
 .toolBar > p {
 	color: #e0e0e0;
-	margin-top: 5px;
+	margin-top: 15px;
 	margin-bottom: 5px;
 }
 
 .colorChange {
 	width: 50%;
 	height: 2rem;
-	margin-left: 15%;
+}
+
+.userCursor {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 11px;
+	height: 11px;
+	pointer-events: none;
+}
+
+.brushCursor {
+	border: 2px solid rgb(0, 0, 0);
+	border-radius: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.userCursor.bucketCursor {
+	width: 0 !important;
+	height: 0 !important;
+	transform: translate(-50%, 0);
+	border-left: 10px solid transparent !important;
+	border-right: 10px solid transparent !important;
+	border-bottom: 15px solid black;
+}
+
+.userCursor.eraserCursor {
+	transform: translate(-50%, -50%);
+	border-radius: 50%;
+	border: 2px solid rgb(0, 0, 0) !important;
+	background-color: white;
+}
+
+.hidden {
+	display: none;
+	opacity: 0;
+}
+
+.loader {
+	position: absolute;
+}
+
+.loader > img {
+	height: 120px;
+	transform: translate(-50%, -50%);
 }
