@@ -19,7 +19,7 @@
 
 ## Project in Action
 
-<img src="src/Images/Screenshot.PNG">
+<img src="src/images/Capture.PNG">
 
 ## Getting Started
 - Clone this repo and unzip the folder wherever you want.
@@ -39,7 +39,7 @@ npm start
 ## Features
 - You can click and drag on canvas to draw when brush tool is selected.
 - You can select Bucket Tool to fill any closed shape.
-- You can download what you have created as png image.
+- You can **download** what you have created as png image.
 - You can choose the color of Brush/bucket tool.
 - You can choose the size of Brush or Eraser.
 - You can reset the whole canvas back to blank canvas.
