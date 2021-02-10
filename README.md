@@ -19,7 +19,7 @@
 
 ## Project in Action
 
-<img src="src/images/Capture.PNG">
+<img src="images/Capture.PNG">
 
 ## Getting Started
 - Clone this repo and unzip the folder wherever you want.
