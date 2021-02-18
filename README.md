@@ -14,8 +14,6 @@
 </p>
 </div>
 
-## [wandering-sage.github.io/canvas/](wandering-sage.github.io/canvas/)
-
 ## Project in Action
 
 <img src="src/images/Capture.PNG">
