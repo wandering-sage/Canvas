@@ -1,7 +1,5 @@
 <div align="center">
-
-<h1>Canvas</h1>
-
+  <h1>🎨 <a href="https://wandering-sage.github.io/Canvas/">Canvas</a></h1>
 <p>
   <strong>A website where you can draw or paint anything. </strong>
   <br /><br />
@@ -16,25 +14,11 @@
 </p>
 </div>
 
+## [wandering-sage.github.io/canvas/](wandering-sage.github.io/canvas/)
 
 ## Project in Action
 
 <img src="src/images/Capture.PNG">
-
-## Getting Started
-- Clone this repo and unzip the folder wherever you want.
-- Launch your **Terminal** or **Command prompt**
-- Change directory to where you unzipped this folder.
-```bash
-cd Desktop
-cd Canvas-main
-```
-- Type npm start to run the program.
-```bash
-npm start
-```
-- The website will be running at [http://127.0.0.1:3000/](http://127.0.0.1:3000/)
-- Enjoy!
 
 ## Features
 - You can click and drag on canvas to draw when brush tool is selected.
@@ -43,6 +27,21 @@ npm start
 - You can choose the color of Brush/bucket tool.
 - You can choose the size of Brush or Eraser.
 - You can reset the whole canvas back to blank canvas.
+
+## Getting Started
+- Clone this repo and unzip the folder wherever you want.
+- Launch your **Terminal** or **Command prompt**
+- Change directory to where you unzipped this folder.
+```bash
+cd Desktop
+cd Canvas
+```
+- Type npm start to run the program.
+```bash
+npm start
+```
+- The website will be running at [http://127.0.0.1:3000/](http://127.0.0.1:3000/)
+- Enjoy!
 
 ## What I learnt
 
